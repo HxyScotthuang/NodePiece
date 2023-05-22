@@ -13,5 +13,7 @@ source activate $DATA/nodepiece-env
 
 which python
 
+cd inductive_lp
+
 python -u run_ilp.py $@ 
 
