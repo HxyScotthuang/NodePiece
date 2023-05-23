@@ -64,3 +64,33 @@ class Ind_NELL(InductiveDataset):
                          inductive=f"nell_v{version}_ind",
                          create_inverse_triples=create_inverse_triples)
 
+
+class Ind_Het(DataSet):
+
+    def __init__(self,
+                 version: str,
+                 create_inverse_triples: bool = True, ):
+        self.cache_root = f"./data/fully-inductive/{version}/raw" 
+
+        self.transductive_part = TriplesFactory(
+            path=self.cache_root + "/train.txt",
+            create_inverse_triples=create_inverse_triples
+        )
+
+        self.inductive_inference = TriplesFactory(
+            path=self.cache_root + "/train_ind.txt",
+            relation_to_id=self.transductive_part.relation_to_id,
+            create_inverse_triples=create_inverse_triples
+        )
+
+        self.inductive_val = TriplesFactory(
+            path=self.cache_root  + "/valid.txt",
+            entity_to_id=self.inductive_inference.entity_to_id,
+            relation_to_id=self.transductive_part.relation_to_id
+        )
+
+        self.inductive_test = TriplesFactory(
+            path=self.cache_root  + "/test_ind.txt",
+            entity_to_id=self.inductive_inference.entity_to_id,
+            relation_to_id=self.transductive_part.relation_to_id
+        )

@@ -1,0 +1,3 @@
+Transductive: Unique relations per node - min: 1, avg: 3.050815558343789, 66th perc: 3.0, max: 20 
+Inductive: Unique relations per node - min: 1, avg: 2.3915827996340346, 66th perc: 2.0, max: 17 
+Number of params: 418200

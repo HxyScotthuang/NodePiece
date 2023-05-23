@@ -16,7 +16,7 @@ from loops.relation_rank_evaluator import RelationPredictionRankBasedEvaluator
 from loops.ilp_evaluator import ILPRankBasedEvaluator
 from utils.sample_negatives import sample_negatives
 
-from datasets.ind_dataset import Ind_FB15k237, Ind_WN18RR, Ind_NELL
+from datasets.ind_dataset import Ind_FB15k237, Ind_WN18RR, Ind_NELL, Ind_Het
 
 import torch
 import click
@@ -58,6 +58,7 @@ random.seed(42)
 @click.option('-tkn_mode', '--tkn_mode', type=str, default="bfs")  # mining paths in iGRAPH,
 @click.option('-no_anc', '--ablate_anchors', type=bool, default=True)  # don't use any anchors in hashes, keep only the relational context
 @click.option('-ind_v', '--ind_v', type=int, default=1)  # 1 / 2 / 3 / 4 - which version of GraIL splits to use
+@click.option('-ind_disease', '--ind_disease', type=str, default=" ")  # hypertension / hematologic-cancer / asthma / breast-cancer / coronary-artery-disease/ epilepsy
 @click.option('-rp', '--rp', type=bool, default=False)  # turn on for the relation prediction task
 @click.option('-gnn', '--gnn', type=bool, default=False)  # whether to use a GNN encoder on top of NodePiece features
 @click.option('-gnn_att', '--gnn_att', type=bool, default=False)  # GNN with attentional aggregation
@@ -98,6 +99,7 @@ def main(
         tkn_mode: str,
         ablate_anchors: bool,
         ind_v: int,
+        ind_disease: str,
         rp: bool,
         gnn: bool,
         gnn_att: bool,
@@ -116,6 +118,8 @@ def main(
         dataset = Ind_WN18RR(create_inverse_triples=True, version=ind_v)
     elif dataset_name == "nell":
         dataset = Ind_NELL(create_inverse_triples=True, version=ind_v)
+    elif dataset_name == "hetionet":
+        dataset = Ind_Het(create_inverse_triples=True, version=ind_disease)
 
     negative_sampler_cls = BasicNegativeSampler
     negative_sampler_kwargs = dict(num_negs_per_pos=num_negatives_ent)
